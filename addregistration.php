@@ -1,0 +1,33 @@
+<?php
+if(isset($_POST['submit'])){
+    $stuid=$_POST['stuid'];
+    $stuname=$_POST['stuname'];
+    $course=$_POST['course'];
+    $section=$_POST['section'];
+    $time=$_POST['time'];
+    $reg_date=$_POST['reg_date'];
+    $ft_name=$_POST['ft_name'];
+    $mt_name=$_POST['mt_name'];
+    $phno=$_POST['phno'];
+    $email=$_POST['email'];
+    $address=$_POST['address'];
+    $fb=$_POST['fb'];
+    $vb=$_POST['vb'];
+    $enroll=$_POST['enroll'];
+    $bd=$_POST['bd'];
+    $nrc=$_POST['nrc'];
+    $gender=$_POST['gender'];
+    $edu=$_POST['edu'];
+    $natown=$_POST['natown'];
+    $res=$_POST['res'];
+    $stimg=$_POST['stimg'];
+    $con=mysqli_connect("localhost:3306","root","","yha");
+    if($con){
+        $sql = "INSERT INTO register(stu_id, stu_name, course_id, section_id, time_id, register_date, enroll_date, father_name, mother_name, phno, e_mail, address, fb_acc, vb_phno, date_birth, nrc_no, gender, edu, native_town, rg_status,stu_img) VALUES ('$stuid','$stuname','$course','$section','$time','$reg_date','$enroll','$ft_name','$mt_name','$phno','$email','$address','$fb','$vb','$bd','$nrc','$gender','$edu','$natown','$res','$stimg')";
+        mysqli_query($con,$sql);
+        header("Location:re_form.php");
+    }else{
+        header("Location:re_form.php");
+    }
+}
+?>

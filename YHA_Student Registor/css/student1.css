@@ -1,0 +1,15 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    background: url('../img/c.jpg') no-repeat;
+}
+.bac1{
+    background-color: orangered;
+}
+.navbar-brand img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+}

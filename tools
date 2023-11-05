@@ -1,0 +1,101 @@
+<?php 
+                  if(isset($_POST['submit'])){
+                    $course = $_POST['course'];
+                    $section = $_POST['section'];
+                    $time = $_POST['time'];
+
+                    $con = mysqli_connect("localhost","root","","yha");
+
+                    $query = "SELECT re.*,c.*,s.*,t.* FROM register AS re LEFT JOIN course AS c ON re.course_id=c.courseid LEFT JOIN section AS s ON re.section_id=s.sectionid LEFT JOIN sectiontime AS t ON re.time_id=t.timeid WHERE course_id='$course' AND section_id='$section' AND time_id='$time'";
+                    $res = mysqli_query($con, $query);
+
+                    if($res){
+                      while($row=mysqli_fetch_assoc($res)){
+                        $stu_id = $row['stu_id'];
+                        $stu_name = $row['stu_name'];
+                        $course = $row['courseid'];
+                        $section = $row['sectionid'];
+                        $time = $row['timeid'];
+                        $date = date("Y/m/d");
+                        $attend = "Present";
+                        $sql = "INSERT INTO attendance(student_id, student_name, course_id, dat, section_id, time_id, attend) VALUES ('$stu_id','$stu_name','$course','$date','$section','$time','$attend')";
+                        mysqli_query($con, $sql);
+                      }
+                      }else{
+                          echo "Error: " . mysqli_error($con);
+                      }
+                  }
+                ?>
+
+          <form action="" class="form" method="post">
+          <table class="table" name="tbl">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Attendance ID</th>
+                <th>Student ID</th>
+                <th>Student Name</th>
+                <th>Date</th>
+                <th>Courses</th>
+                <th>Section</th>
+                <th>Time</th>
+                <th>Attendance</th>
+                <th colspan="2" style="text-align:center">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+            
+
+            <?php 
+            if(isset($_POST['submit'])){
+              $course = $_POST['course'];
+              $section = $_POST['section'];
+              $time = $_POST['time'];
+              $date = date("Y/m/d");
+              $con = mysqli_connect("localhost","root","","yha");
+
+              $sql = "SELECT a.*,re.*,c.*,s.*,se.* FROM attendance AS a LEFT JOIN register AS re ON a.student_id=re.stu_id LEFT JOIN course as c ON a.course_id=c.courseid LEFT JOIN section AS s ON a.section_id=s.sectionid LEFT JOIN sectiontime AS se ON a.time_id=se.timeid WHERE a.course_id='$course' AND a.section_id='$section' AND a.time_id='$time' AND dat='$date'";
+
+              // $sql = "SELECT re.*,c.*,s.*,t.* FROM register AS re LEFT JOIN course AS c ON re.course_id=c.courseid LEFT JOIN section AS s ON re.section_id=s.sectionid LEFT JOIN sectiontime AS t ON re.time_id=t.timeid WHERE course_id='$course' AND section_id='$section' AND time_id='$time'";
+              $res = mysqli_query($con, $sql);
+              $i = 1;
+              while($row = mysqli_fetch_assoc($res)):
+            ?>
+
+            <tr>
+              <td><input type="number" disabled value="<?php echo $i;?>"></td>
+              <td><input type="number" disabled name="attend_id" value="<?php echo $row['attend_id'];?>"></td>
+              <td><input type="number" disabled name="stu_id" value="<?php echo $row['stu_id'];?>"></td>
+              <td><input type="text" disabled name="stu_name" value="<?php echo $row['stu_name'];?>"></td>
+              <td><input type="date" disabled name="date" value="<?php echo $row['dat'];?>"></td>
+              <td><input type="text" disabled name="course" value="<?php echo $row['coursename'];?>"></td>
+              <td><input type="text" disabled name="section" value="<?php echo $row['sectionname'];?>"></td>
+              <td><input type="text" disabled name="time" value="<?php echo $row['timename'];?>"></td>
+              <td><input type="text" disabled name="attend" value="<?php echo $row['attend'];?>"></td>
+              <td><a href="attend_entery4.php?edit=<?php echo $row['attend_id'];?>" style="width:50px;" class="btn btn-primary">Edit</a></td>
+              <td><a href="attend_process.php?delete=<?php echo $row['attend_id'];?>" style="width: 70px;" class="btn btn-danger">Delete</a></td>
+            </tr>
+            <?php $i++;endwhile;}else if(isset($_POST['update'])){
+                  $date = date("Y/m/d");
+                  $con = mysqli_connect("localhost","root","","yha");
+                  $sql = "";
+                  $res = mysqli_query($con, $sql);
+                  while($row = mysqli_fetch_assoc($res)):
+              ?>
+                  <tr>
+                    <td><input type="number" disabled value="<?php echo $i;?>"></td>
+                    <td><input type="number" disabled name="attend_id" value="<?php echo $row['attend_id'];?>"></td>
+                    <td><input type="number" disabled name="stu_id" value="<?php echo $row['stu_id'];?>"></td>
+                    <td><input type="text" disabled name="stu_name" value="<?php echo $row['stu_name'];?>"></td>
+                    <td><input type="date" disabled name="date" value="<?php echo $row['dat'];?>"></td>
+                    <td><input type="text" disabled name="course" value="<?php echo $row['coursename'];?>"></td>
+                    <td><input type="text" disabled name="section" value="<?php echo $row['sectionname'];?>"></td>
+                    <td><input type="text" disabled name="time" value="<?php echo $row['timename'];?>"></td>
+                    <td><input type="text" disabled name="attend" value="<?php echo $row['attend'];?>"></td>
+                    <td><a href="attend_entery4.php?edit=<?php echo $row['attend_id'];?>" style="width:50px;" class="btn btn-primary">Edit</a></td>
+                    <td><a href="attend_process.php?delete=<?php echo $row['attend_id'];?>" style="width: 70px;" class="btn btn-danger">Delete</a></td>
+                  </tr>
+            <?php endwhile;}?>
+            </tbody>
+          </table>
+          </form>
